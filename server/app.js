@@ -1,18 +1,16 @@
-const cors = require('cors');
 const express = require('express');
 const app = express();
 
-app.use(cors({
-  origin: 'https://chat-application-ynam.vercel.app', // or '*' to allow all origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true // if you're using cookies or sessions
-}));
-
-// Your routes go here
 app.post('/auth/login', (req, res) => {
-  // handle login
+  res.setHeader('Access-Control-Allow-Origin', 'https://chat-application-ynam.vercel.app'); // Set specific allowed origin
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Set allowed methods
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Set allowed headers
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // Enable credentials (if needed)
+
+  res.send('Login success');
 });
 
 app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+  console.log('Server running on port 3000');
 });
+
