@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 app.use(cors({
@@ -6,7 +7,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // if you're using cookies or sessions
   }));
-  
+
 app.options('*', cors({
     origin: 'https://chat-application-ynam-lutr43wh0-haranyas-projects.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
