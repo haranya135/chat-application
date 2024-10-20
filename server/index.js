@@ -13,12 +13,26 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
 const twilioClient = require('twilio')(accountSid, authToken);
 
+const allowedOrigins = [
+    'https://chat-application-ynam.vercel.app',
+    'https://chat-application-ynam-lutr43wh0-haranyas-projects.vercel.app'
+  ];
+
 app.use(cors());
 app.use(express.json());
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: true })); // or false
-
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
 app.get('/', (req, res) => {
     res.send('Hello, World!');
@@ -48,6 +62,19 @@ app.post('/', (req, res) => {
     return res.status(200).send('Not a new message request');
 });
 
+app.options('*', (req, res) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.sendStatus(200);
+  });
+
 app.use('/auth', authRoutes);
+
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
